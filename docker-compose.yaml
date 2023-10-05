@@ -1,0 +1,22 @@
+version: '3.2'
+services:
+  data-warehouse-db:
+    image: postgres:bookworm
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      PGDATA: /data/postgres
+    volumes:
+      - ./data/postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - dbt-network
+  dbt-core-server:
+    image: juan-domingos/dbt-core-ubuntu:1.0.0
+    volumes:
+      - ./dbt_posgres:~/dbt/dbt_posgres
+networks:
+  dbt-network:
+    name: dbt-network
